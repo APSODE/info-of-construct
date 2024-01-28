@@ -3,9 +3,10 @@ import traceback
 
 from sqlalchemy.sql.elements import BinaryExpression
 from sqlalchemy.orm.query import Query
-from typing import Iterable, Optional, List, TypeVar, Union, NoReturn, Type
+from typing import Iterable, Optional, List, TypeVar, Union, Type
 from database.DatabaseCreator import DatabaseCreator
-from utils.Serializer import ModelType
+from database.custom_typing.ModelType import ModelType
+
 
 T = TypeVar("T")
 

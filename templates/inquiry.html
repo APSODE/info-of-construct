@@ -1,0 +1,98 @@
+{% extends "ioc_main.html" %}
+{% block head %}
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/dashboard/">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3">
+    <link href="../static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="../static/css/dashboard.css" rel="stylesheet">
+{% endblock %}
+{% block content %}
+    <br>
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+          <form class="container-fluid">
+              <div class="input-group" style="margin-bottom: 15px">
+                  <input id="company_name" type="text" class="form-control" placeholder="건설사 이름" aria-describedby="basic-addon1">
+                  {% if inquiry_type == "dr" %}
+                    <input id="page_number" type="text" class="form-control" placeholder="페이지 번호 (기본값 : 1 페이지) -  (1페이지에 10개씩 데이터 제공)" aria-describedby="basic-addon1">
+                  {% endif %}
+                  <div class="btn-group me-2" style="margin-left: 25px; margin-right: 25px">
+                      {% block ajax_button %}
+                      {% include "inquiry_ajax.html" %}
+                      {% endblock %}
+                  </div>
+              </div>
+          </form>
+
+      </div>
+      <br>
+      <br>
+      <h2>조회 정보</h2>
+      <div class="table-responsive small">
+        <table class="table table-striped table-sm">
+          <thead>
+{#          <tr>#}
+{#              <th scope="col">항목</th>#}
+{#              <th scope="col">값</th>#}
+{#          </tr>#}
+          {% if inquiry_type == "ca" %}
+            <tr>
+              <th scope="col">번호</th>
+              <th scope="col">사고업체</th>
+              <th scope="col">사고 사업장명</th>
+              <th scope="col">세대수</th>
+              <th scope="col">사고일자</th>
+              <th scope="col">이행상황</th>
+              <th scope="col">공사 이행 주체</th>
+            </tr>
+          {% elif inquiry_type == "ri" %}
+            <tr>
+              <th scope="col">번호</th>
+              <th scope="col">연도</th>
+              <th scope="col">사고업체</th>
+              <th scope="col">지역</th>
+              <th scope="col">사업장명</th>
+              <th scope="col">사고일</th>
+              <th scope="col">이행방안</th>
+              <th scope="col">대위변제액(백만원)</th>
+            </tr>
+            {% elif inquiry_type == "mih" %}
+              <th scope="row" style="word-break:break-all">연도</th>
+              <th scope="row" style="word-break:break-all">구분</th>
+              <th scope="row" style="word-break:break-all">접수번호</th>
+              <th scope="row" style="word-break:break-all">접수일자</th>
+              <th scope="row" style="word-break:break-all">기업명</th>
+              <th scope="row" style="word-break:break-all">기업주소</th>
+              <th scope="row" style="word-break:break-all">제품군</th>
+              <th scope="row" style="word-break:break-all">건축자재명</th>
+              <th scope="row" style="word-break:break-all">모델명</th>
+              <th scope="row" style="word-break:break-all">구분1</th>
+              <th scope="row" style="word-break:break-all">시험검사기관</th>
+              <th scope="row" style="word-break:break-all">시료채취일자</th>
+              <th scope="row" style="word-break:break-all">시험일자</th>
+              <th scope="row" style="word-break:break-all">시험결과</th>
+              <th scope="row" style="word-break:break-all">성적서발급일</th>
+              <th scope="row" style="word-break:break-all">총휘발성유기화합물</th>
+              <th scope="row" style="word-break:break-all">폼알데하이드</th>
+              <th scope="row" style="word-break:break-all">톨루엔</th>
+
+            {% elif inquiry_type == "dr" %}
+              <th scope="col">계약명</th>
+              <th scope="col">설계부서</th>
+              <th scope="col">심의일</th>
+              <th scope="col">기술(자재)명</th>
+              <th scope="col">업체명</th>
+            {% endif %}
+
+          </thead>
+          <tbody id="inquiry_result">
+
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+</div>
+<script src="../static/js/bootstrap.bundle.min.js"></script>
+</html>
+{% endblock %}

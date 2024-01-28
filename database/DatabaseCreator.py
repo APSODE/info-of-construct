@@ -6,20 +6,33 @@ from sqlalchemy import create_engine, Engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy.orm.decl_api import DeclarativeMeta
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy_utils import create_database
+
+from src.JsonReadWrite import JsonReadWrite
 
 
 class _DatabaseAccount:
-    def __init__(self, id: Optional[str] = None, pw: Optional[str] = None):
-        self._id = id if id is not None else "admin"
-        self._pw = pw if pw is not None else "admin"
+    def __init__(self):
+        self.CURRENT_FILE_PATH = os.path.dirname(os.path.abspath(__file__))
+        self._account_data_file = os.path.join(self.CURRENT_FILE_PATH, "database_account.json")
+        self._id = ""
+        self._pw = ""
+        self._read_data()
+
+    def _read_data(self) -> None:
+        ac_data = JsonReadWrite.ReadJson(
+            self._account_data_file
+        )
+        self._id = quote_plus(ac_data.get("id"))
+        self._pw = quote_plus(ac_data.get("pw"))
 
     @property
     def id(self):
-        return quote_plus(self._id)
+        return self._id
 
     @property
     def pw(self):
-        return quote_plus(self._pw)
+        return self._pw
 
 
 class DatabaseCreator:
@@ -55,7 +68,7 @@ class DatabaseCreator:
         return DatabaseCreator()
 
     def _create_engine(self) -> Engine:
-        # create_database(f"mysql+pymysql://{self._database_account.id}:{self._database_account.pw}@127.0.0.1:3306/ors_db")
+        # create_database(f"mysql+pymysql://{self._database_account.id}:{self._database_account.pw}@127.0.0.1:3306/ioc_db")
         return create_engine(
             f"mysql+pymysql://{self._database_account.id}:{self._database_account.pw}@127.0.0.1:3306/ioc_db",
             echo = True

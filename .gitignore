@@ -1,3 +1,4 @@
 /.idea
 /Testor.py
 /test_main.http
+/database/database_account.json

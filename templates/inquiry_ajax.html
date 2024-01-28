@@ -1,0 +1,61 @@
+{% block ajax_button %}
+    <button id="inquiry_btn" type="button" style="margin-left: auto;">조회</button>
+    <script>
+        $('#inquiry_btn').click(function () {
+            var company_name = $('#company_name').val()
+
+            {% if inquiry_type == "dr" %}
+                var page_number = $('#page_number').val()
+                var post_data = {
+                    "company_name": company_name,
+                    "page_number": page_number
+                }
+            {% else %}
+                var post_data = {
+                    "company_name": company_name
+                }
+            {% endif %}
+
+            {% if inquiry_type == "ca" %}
+                var rq_url = "{{ url_for("ca_inquiry") }}"
+            {% elif inquiry_type == "ri" %}
+                var rq_url = "{{ url_for("ri_inquiry") }}"
+            {% elif inquiry_type == "mih" %}
+                var rq_url = "{{ url_for("mih_inquiry") }}"
+            {% elif inquiry_type == "dr" %}
+                var rq_url = "{{ url_for("dr_inquiry") }}"
+            {% endif %}
+
+            $.ajax({
+                url: rq_url,
+                type: 'POST',
+                data: JSON.stringify(post_data),
+                dataType: 'JSON',
+                contentType: 'application/json',
+                success: function (data) {
+                    var inquiry_datas = data["inquiry_datas"];
+
+                    // 기존 결과를 삭제
+                    $('#inquiry_result').empty();
+
+                    // 각 데이터를 행으로 추가
+                    $.each(inquiry_datas, function (_, inquiry_data) {
+                        var data_elem_container = $("<tr>");
+
+                        // 각 데이터의 속성을 열로 추가
+                        $.each(inquiry_data, function (_, inquiry_inner_data) {
+                            var inner_data_elem = $("<td>").text(inquiry_inner_data);
+                            data_elem_container.append(inner_data_elem);
+                        });
+
+                        $('#inquiry_result').append(data_elem_container);
+                    });
+
+                },
+                error: function (request, status, error) {
+                    alert("조회 결과를 가져오는 도중에 ajax 통신에 실패하였습니다.")
+                }
+            })
+        })
+    </script>
+{% endblock %}
